@@ -25,21 +25,24 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
-  res.send(books[author]);
+  const requested_author = Object.values(books).filter((book) => book.author === author);
+  res.send(requested_author);
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
-  res.send(books[title])
+  let requested_title = Object.values(books).filter((book) => book.title === title);
+  res.send(requested_title);
 
 });
 
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
-  const review = req.params.review;
-  res.send(books[review])
+  const isbn = req.params.isbn;
+  let requested_review = Object.values(books).filter((book) => book.isbn === isbn);
+  res.send(requested_review[review]);
 
   
 });
