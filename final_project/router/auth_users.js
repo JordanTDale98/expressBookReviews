@@ -32,7 +32,6 @@ const authenticatedUser = (username,password)=>{ //returns boolean
 
 //only registered users can login
 regd_users.post("/login", (req,res) => {
-  //Write your code here
   const username = req.query.username;
   const password = req.query.password;
 
@@ -48,17 +47,29 @@ regd_users.post("/login", (req,res) => {
 
     req.session.authorization = {accesstoken, username}
 
-    return req.status(200).send({message: "Successfully logged in."});
+    return res.status(200).send({message: "Successfully logged in."});
     }
     else{
-        return req.status(208).json({message: "Trouble logging in. Check username and password"});
+        return res.status(208).json({message: "Trouble logging in. Check username and password"});
     }
 });
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+  const isbn = req.params.isbn;
+  const newreview = req.query.review;
+  const requested_book_review = books[isbn].reviews;
+
+  if (requested_book_review != newreview){
+    requested_book_review = newreview;
+
+    return res.status(200).json({message: "Review successfully added"});
+  }
+  else{
+    return res.status(208).json({message: "This review has already been written."})
+  }
+
 });
 
 module.exports.authenticated = regd_users;

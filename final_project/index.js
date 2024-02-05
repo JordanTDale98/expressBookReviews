@@ -12,27 +12,21 @@ app.use("/customer",session({secret:"fingerprint_customer",resave: true, saveUni
 
 app.use("/customer/auth/*", function auth(req,res,next){
 //The authenication mechanism
-    const username = req.body.username;
-    const password = req.body.password;
-
-    if (!username || !password) {
-        return res.status(404).json({message: "Error logging in."});
-    }
-    if (authenticatedUser(username, password)) {
-        let accesstoken = jwt.sign({
-
-            data: password
-
-        },'access', {expiresIn: 60 * 60});
-
-        req.session.authorization = {accesstoken, username}
-
-        return req.status(200).send({message: "Successfully logged in."});
-    }
-    else{
-        return req.status(208).json({message: "Trouble logging in. Check username and password"});
-    }
-    });
+if(req.session.authorization) { //get the authorization object stored in the session
+    token = req.session.authorization['accessToken']; //retrieve the token from authorization object
+    jwt.verify(token, "access",(err,user)=>{ //Use JWT to verify token
+        if(!err){
+            req.user = user;
+            next();
+        }
+        else{
+            return res.status(403).json({message: "User not authenticated"})
+        }
+     });
+ } else {
+     return res.status(403).json({message: "User not logged in"})
+ }
+});
  
 const PORT =5000;
 
