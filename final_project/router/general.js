@@ -5,6 +5,8 @@ let users = require("./auth_users.js").users;
 const public_users = express.Router();
 
 
+
+
 public_users.post("/register", (req,res) => {
     const username = req.query.username;
     const password = req.query.password;
@@ -22,8 +24,12 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  let bookList = JSON.stringify(books, null, 4);
-  res.send(bookList);
+  let bookPromise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        let bookList = JSON.stringify(books, null, 4);
+        res.send(bookList);
+        resolve()
+    },3000)})
 });
 
 // Get book details based on ISBN
