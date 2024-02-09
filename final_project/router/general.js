@@ -24,25 +24,47 @@ public_users.post("/register", (req,res) => {
 
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
-  let bookPromise = new Promise((resolve, reject) => {
+    let bookList = JSON.stringify(books, null, 4);
+    let bookPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
-        let bookList = JSON.stringify(books, null, 4);
+        resolve(bookList)
+    },1000)
+})
+    bookPromise.then((bookList) => {
         res.send(bookList);
-        resolve()
-    },3000)})
+    })
 });
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
-  const isbn = req.params.isbn;
-  res.send(books[isbn])
+    const isbn = req.params.isbn;
+    let bookByISBN = books[isbn];
+    let isbnPromise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(bookByISBN)
+        },1000)
+    })
+
+    isbnPromise.then((bookByISBN)=> {
+        res.send(bookByISBN);
+  })
+  
  });
   
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   const author = req.params.author;
-  const requested_author = Object.values(books).filter((book) => book.author === author);
-  res.send(requested_author);
+  let requested_author = Object.values(books).filter((book) => book.author === author);
+  let authorPromise = new Promise((resolve, reject) => {
+    setTimeout(() =>{
+        resolve(requested_author)
+    },1000)
+  })
+
+    authorPromise.then((requested_author) => {
+        res.send(requested_author);
+    })
+  
 });
 
 // Get all books based on title
@@ -50,7 +72,15 @@ public_users.get('/title/:title',function (req, res) {
   //Write your code here
   const title = req.params.title;
   let requested_title = Object.values(books).filter((book) => book.title === title);
-  res.send(requested_title);
+  let titlePromise = new Promise((resolve, reject) =>{
+        setTimeout(() =>{
+            resolve(requested_title)
+        },1000)
+    })
+
+  titlePromise.then((requested_title) => {
+    res.send(requested_title);
+  })
 
 });
 
