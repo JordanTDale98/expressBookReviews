@@ -58,8 +58,8 @@ regd_users.post("/login", (req,res) => {
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
   const isbn = req.params.isbn;
-  const newreview = req.query.review;
-  const requested_book_review = books[isbn].reviews;
+  let newreview = req.query.review;
+  let requested_book_review = books[isbn].reviews;
 
   if (requested_book_review != newreview){
     requested_book_review = newreview;
@@ -67,7 +67,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     return res.status(200).json({message: "Review successfully added"});
   }
   else{
-    return res.status(208).json({message: "This review has already been written."})
+    return res.status(208).json({message: "You have already written this review."})
   }
 
 });
